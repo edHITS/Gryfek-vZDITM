@@ -1,28 +1,6 @@
 const { SlashCommandBuilder, ActivityType, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-    // Definicja komendy dla komendy.js
-    data: new SlashCommandBuilder()
-        .setName('status')
-        .setDescription('Zmień status oraz opis aktywności bota')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator) // Dostęp tylko dla administratorów
-        .addStringOption(option =>
-            option.setName('tryb')
-                .setDescription('Wybierz widoczność bota')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'Dostępny (Zielony)', value: 'online' },
-                    { name: 'Zaraz wracam (Żółty)', value: 'idle' },
-                    { name: 'Nie przeszkadzać (Czerwony)', value: 'dnd' },
-                    { name: 'Niedostępny (Szary)', value: 'invisible' }
-                )
-        )
-        .addStringOption(option =>
-            option.setName('opis')
-                .setDescription('Napis wyświetlany w profilu bota (Custom Status)')
-                .setRequired(false)
-        ),
-
     // Logika obsługi zdarzenia w index.js
     async execute(interaction) {
         const status = interaction.options.getString('tryb');
