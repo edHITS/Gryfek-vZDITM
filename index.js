@@ -248,7 +248,7 @@ client.once('ready', async () => {
 
     autoDeleteWorker(client);
     uruchomWnioskiAutodelete(client);
-    uruchomRaportyAutodelete(client);
+    // uruchomRaportyAutodelete(client);
 });
 
 client.login(process.env.TOKEN);
