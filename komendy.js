@@ -1,7 +1,7 @@
 require('dotenv').config();
-const { REST, Routes, SlashCommandBuilder, ChannelType } = require('discord.js');
+const { REST, Routes, SlashCommandBuilder, ChannelType, PermissionFlagsBits } = require('discord.js');
 
-const commands = [    
+const commands = [   
     new SlashCommandBuilder()
         .setName('wniosek')
         .setDescription('Wyślij rozpatrzenie wniosku')
@@ -34,33 +34,6 @@ const commands = [
                 )
         ),
 
-    // new SlashCommandBuilder()
-    //     .setName('praca')
-    //     .setDescription('Wyślij rozpatrzenie wniosku o pracę')
-    //     .addUserOption(option =>
-    //         option.setName('osoba')
-    //             .setDescription('Wyślij do')
-    //             .setRequired(true)
-    //     )
-    //     .addStringOption(option =>
-    //         option.setName('etap')
-    //             .setDescription('Etap rekrutacji')
-    //             .setRequired(true)
-    //             .addChoices(
-    //                 { name: '1', value: '1' },
-    //                 { name: '2', value: '2' }
-    //             )
-    //     )
-    //     .addStringOption(option =>
-    //         option.setName('status')
-    //             .setDescription('Status')
-    //             .setRequired(true)
-    //             .addChoices(
-    //                 { name: 'Przyjęty', value: 'Przyjęty' },
-    //                 { name: 'Odrzucony', value: 'Odrzucony' }
-    //             )
-    //     ),
-
     new SlashCommandBuilder()
         .setName('wiadomosc')
         .setDescription('Wyślij wiadomość tekstową na wybrany kanał.')
@@ -85,9 +58,32 @@ const commands = [
                 .setDescription('Opcjonalne ID wiadomości z wybranego kanału, na którą bot ma odpowiedzieć')
                 .setRequired(false)
         ),
+
     new SlashCommandBuilder()
         .setName('panel')
-        .setDescription('Otwórz tajny panel zarządzania')
+        .setDescription('Otwórz tajny panel zarządzania'),
+
+    // --- NOWA KOMENDA STATUS ---
+    new SlashCommandBuilder()
+        .setName('status')
+        .setDescription('Zmień status oraz opis aktywności bota')
+        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        .addStringOption(option =>
+            option.setName('tryb')
+                .setDescription('Wybierz tryb bota')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'Dostępny (Zielony)', value: 'online' },
+                    { name: 'Zaraz wracam (Żółty)', value: 'idle' },
+                    { name: 'Nie przeszkadzać (Czerwony)', value: 'dnd' },
+                    { name: 'Niedostępny (Szary)', value: 'invisible' }
+                )
+        )
+        .addStringOption(option =>
+            option.setName('opis')
+                .setDescription('Opis pod nazwą bota (Custom Status)')
+                .setRequired(false)
+        )
 ];
 
 module.exports = { commands };
