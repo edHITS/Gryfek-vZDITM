@@ -11,7 +11,7 @@ module.exports = {
                 status: status,
                 activities: [{
                     type: ActivityType.Custom,
-                    name: 'custom',
+                    name: '',
                     state: opis
                 }]
             });
