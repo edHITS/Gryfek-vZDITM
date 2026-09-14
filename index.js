@@ -18,6 +18,7 @@ const { wyslijWniosek, obsluzKomponentyWniosku, uruchomWnioskiAutodelete } = req
 const { obsluzZdjecia, cleanExpiredWarnings, autoDeleteWorker, obsluzReakcjeGalerii } = require('./zdjecia');
 // const { wyslijZwolnienieDyscyplinarne } = require('./dyscyplinarka');
 const { wyslijWiadomosc } = require('./wiadomosc');
+const statusCommand = require('./status.js');
 // const { getDateOptions } = require('./data_parser');
 
 // NOWE: Import obsługi panelu administracyjnego Edhitsa
@@ -153,6 +154,11 @@ client.on('interactionCreate', async (interaction) => {
             await obsluzPanelKomenda(interaction);
             return;
         }
+
+        if (interaction.commandName === 'status') {
+            await statusCommand.execute(interaction);
+        }
+});
 
     } catch (err) {
         console.error(err);
