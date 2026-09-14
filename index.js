@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Partials, MessageFlags, ActivityType } = requ
 const fs = require('fs');
 const express = require('express');
 
-const BOT_STATUS = 'idle'; 
+const BOT_STATUS = 'online'; 
 // 'online' -> Dostępny (Zielona)
 // 'idle' -> Zaraz wracam (Żółta)
 // 'dnd' -> Nie przeszkadzać / Zajęty (Czerwona)
