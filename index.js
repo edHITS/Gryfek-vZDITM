@@ -10,7 +10,7 @@ const BOT_STATUS = 'idle';
 // 'invisible' -> Niedostępny (Szara)
 
 // POPRAWKA: Importujemy obsluzKomponentyWniosku z modułu wniosek
-// const { wyslijWniosek, obsluzKomponentyWniosku, uruchomWnioskiAutodelete } = require('./wniosek');
+const { wyslijWniosek, obsluzKomponentyWniosku, uruchomWnioskiAutodelete } = require('./wniosek');
 // const { obsluzRaport, obsluzKomponentyPanelu, uruchomRaportyAutodelete } = require('./raport');
 // const { przydzielSluzbe } = require('./grafik');
 // const { wyslijKod_Pracownika } = require('./kod_pracownika');
