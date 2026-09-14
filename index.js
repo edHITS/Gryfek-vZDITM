@@ -9,23 +9,10 @@ const BOT_STATUS = 'online';
 // 'dnd' -> Nie przeszkadzać / Zajęty (Czerwona)
 // 'invisible' -> Niedostępny (Szara)
 
-// POPRAWKA: Importujemy obsluzKomponentyWniosku z modułu wniosek
 const { wyslijWniosek, obsluzKomponentyWniosku, uruchomWnioskiAutodelete } = require('./wniosek');
-// const { obsluzRaport, obsluzKomponentyPanelu, uruchomRaportyAutodelete } = require('./raport');
-// const { przydzielSluzbe } = require('./grafik');
-// const { wyslijKod_Pracownika } = require('./kod_pracownika');
-// const { wyslijRozpatrzeniePracy } = require('./praca');
 const { obsluzZdjecia, cleanExpiredWarnings, autoDeleteWorker, obsluzReakcjeGalerii } = require('./zdjecia');
-// const { wyslijZwolnienieDyscyplinarne } = require('./dyscyplinarka');
 const { wyslijWiadomosc } = require('./wiadomosc');
 const statusCommand = require('./status.js');
-// const { getDateOptions } = require('./data_parser');
-
-// NOWE: Import obsługi panelu administracyjnego Edhitsa
-// const { obsluzPanelKomenda, obsluzKomponentyPaneluEdhitsa } = require('./panel');
-
-// const pojazdy = require('./json/pojazdy.json');
-// const bledyLista = require('./json/bledy.json');
 
 const LOG_FILE = "./logs.txt";
 
@@ -67,11 +54,19 @@ const ed_DISCORD_ID = "1188159976523452527";
 
 const ALLOWED_CHANNEL_ID = "1548956326720311327";
 const COMMAND_PERMISSIONS = {
+    wniosek: {
+        roles: [],
+        users: ["1188159976523452527"]
+    },
     wiadomosc: { 
         roles: [], 
         users: ["1188159976523452527"]
     },
     panel: {
+        roles: [],
+        users: ["1188159976523452527"]
+    },
+    status: {
         roles: [],
         users: ["1188159976523452527"]
     }
@@ -101,7 +96,9 @@ client.on('interactionCreate', async (interaction) => {
         const cId = interaction.customId;
         if (cId && cId.startsWith('ed_')) {
             try {
-                await obsluzKomponentyPaneluEdhitsa(interaction, client);
+                if (typeof obsluzKomponentyPaneluEdhitsa === 'function') {
+                    await obsluzKomponentyPaneluEdhitsa(interaction, client);
+                }
             } catch (err) {
                 console.error("Błąd w komponentach panelu Edhitsa:", err);
             }
@@ -111,7 +108,9 @@ client.on('interactionCreate', async (interaction) => {
         if (cId && cId.startsWith('w5_')) {
             try {
                 if (cId.startsWith('w5_modal_czesc1_') || cId.startsWith('w5_modal_czesc2_') || cId === 'w5_btn_otworz_czesc2') {
-                    await obsluzKomponentyPanelu(interaction);
+                    if (typeof obsluzKomponentyPanelu === 'function') {
+                        await obsluzKomponentyPanelu(interaction);
+                    }
                     return;
                 }
 
@@ -136,7 +135,6 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     try {
-        
         if (interaction.commandName === 'wniosek') {
             logCommand("WNIOSKI", interaction);
             await wyslijWniosek(interaction);
@@ -151,17 +149,19 @@ client.on('interactionCreate', async (interaction) => {
 
         if (interaction.commandName === 'panel') {
             logCommand("PANEL EDHITSA", interaction);
-            await obsluzPanelKomenda(interaction);
+            if (typeof obsluzPanelKomenda === 'function') {
+                await obsluzPanelKomenda(interaction);
+            }
             return;
         }
 
         if (interaction.commandName === 'status') {
+            logCommand("STATUS", interaction);
             await statusCommand.execute(interaction);
+            return;
         }
-});
-
     } catch (err) {
-        console.error(err);
+        console.error("Błąd podczas wykonywania komendy:", err);
         if (!interaction.replied && !interaction.deferred) {
             await interaction.reply({
                 content: "Błąd systemu",
@@ -254,7 +254,6 @@ client.once('ready', async () => {
 
     autoDeleteWorker(client);
     uruchomWnioskiAutodelete(client);
-    // uruchomRaportyAutodelete(client);
 });
 
 client.login(process.env.TOKEN);
