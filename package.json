@@ -1,4 +1,11 @@
-"dependencies": {
+{
+  "name": "gryfek-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
     "@discordjs/voice": "^0.18.0",
     "canvas": "^3.2.3",
     "discord.js": "^14.26.3",
@@ -10,3 +17,4 @@
     "sodium-native": "^4.1.1",
     "sqlite3": "^6.0.1"
   }
+}
