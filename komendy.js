@@ -1,11 +1,8 @@
 require('dotenv').config();
 const { REST, Routes, SlashCommandBuilder, ChannelType } = require('discord.js');
 
-// Import zewnętrznych modułów komend
-const statusCommand = require('./status.js');
-const vcCommand = require('./vc.js');
-
 const commands = [   
+    // 1. Komenda /wniosek
     new SlashCommandBuilder()
         .setName('wniosek')
         .setDescription('Wyślij rozpatrzenie wniosku')
@@ -38,6 +35,7 @@ const commands = [
                 )
         ),
 
+    // 2. Komenda /wiadomosc
     new SlashCommandBuilder()
         .setName('wiadomosc')
         .setDescription('Wyślij wiadomość tekstową na wybrany kanał.')
@@ -63,16 +61,42 @@ const commands = [
                 .setRequired(false)
         ),
 
+    // 3. Komenda /panel
     new SlashCommandBuilder()
         .setName('panel')
         .setDescription('Otwórz tajny panel zarządzania'),
 
-    // Rejestracja komend z zewnętrznych plików:
-    statusCommand.data,
-    vcCommand.data
-];
+    // 4. Komenda /status
+    new SlashCommandBuilder()
+        .setName('status')
+        .setDescription('Zmień status bota')
+        .addStringOption(option =>
+            option.setName('tryb')
+                .setDescription('Wybierz status bota')
+                .setRequired(true)
+                .addChoices(
+                    { name: 'Dostępny (Online)', value: 'online' },
+                    { name: 'Zaraz wracam (Idle)', value: 'idle' },
+                    { name: 'Nie przeszkadzać (DND)', value: 'dnd' },
+                    { name: 'Niedostępny (Invisible)', value: 'invisible' }
+                )
+        ),
 
-module.exports = { commands };
+    // 5. Komenda /vc (wpisana bezpośrednio)
+    new SlashCommandBuilder()
+        .setName('vc')
+        .setDescription('Zarządzaj połączeniem bota na kanale głosowym')
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('join')
+                .setDescription('Dołącz bota do Twojego kanału głosowego')
+        )
+        .addSubcommand(subcommand =>
+            subcommand
+                .setName('leave')
+                .setDescription('Rozłącz bota z kanału głosowego')
+        )
+].map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
 
@@ -85,6 +109,6 @@ const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
         );
         console.log("OK - komendy dodane pomyślnie!");
     } catch (err) {
-        console.error(err);
+        console.error("Błąd rejestracji komend:", err);
     }
 })();
