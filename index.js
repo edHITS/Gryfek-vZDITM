@@ -160,6 +160,12 @@ client.on('interactionCreate', async (interaction) => {
             await statusCommand.execute(interaction);
             return;
         }
+
+        if (interaction.commandName === 'vc') {
+            const vcCommand = require('./vc.js');
+            await vcCommand.execute(interaction);
+            return;
+        }
     } catch (err) {
         console.error("Błąd podczas wykonywania komendy:", err);
         if (!interaction.replied && !interaction.deferred) {
