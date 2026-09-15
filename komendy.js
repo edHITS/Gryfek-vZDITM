@@ -2,7 +2,7 @@ require('dotenv').config();
 const { REST, Routes, SlashCommandBuilder, ChannelType } = require('discord.js');
 
 const commands = [   
-    // 1. Komenda /wniosek
+    // 0: wniosek
     new SlashCommandBuilder()
         .setName('wniosek')
         .setDescription('Wyślij rozpatrzenie wniosku')
@@ -35,7 +35,7 @@ const commands = [
                 )
         ),
 
-    // 2. Komenda /wiadomosc
+    // 1: wiadomosc
     new SlashCommandBuilder()
         .setName('wiadomosc')
         .setDescription('Wyślij wiadomość tekstową na wybrany kanał.')
@@ -61,12 +61,12 @@ const commands = [
                 .setRequired(false)
         ),
 
-    // 3. Komenda /panel
+    // 2: panel
     new SlashCommandBuilder()
         .setName('panel')
         .setDescription('Otwórz tajny panel zarządzania'),
 
-    // 4. Komenda /status
+    // 3: status (wpisany bezpośrednio w tablicę)
     new SlashCommandBuilder()
         .setName('status')
         .setDescription('Zmień status bota')
@@ -82,7 +82,7 @@ const commands = [
                 )
         ),
 
-    // 5. Komenda /vc (wpisana bezpośrednio)
+    // 4: vc
     new SlashCommandBuilder()
         .setName('vc')
         .setDescription('Zarządzaj połączeniem bota na kanale głosowym')
