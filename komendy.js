@@ -1,5 +1,9 @@
 require('dotenv').config();
-const { REST, Routes, SlashCommandBuilder, ChannelType, PermissionFlagsBits } = require('discord.js');
+const { REST, Routes, SlashCommandBuilder, ChannelType } = require('discord.js');
+
+// Import zewnętrznych modułów komend
+const statusCommand = require('./status.js');
+const vcCommand = require('./vc.js');
 
 const commands = [   
     new SlashCommandBuilder()
@@ -63,27 +67,9 @@ const commands = [
         .setName('panel')
         .setDescription('Otwórz tajny panel zarządzania'),
 
-    // --- NOWA KOMENDA STATUS ---
-    new SlashCommandBuilder()
-        .setName('status')
-        .setDescription('Zmień status oraz opis aktywności bota')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
-        .addStringOption(option =>
-            option.setName('tryb')
-                .setDescription('Wybierz tryb bota')
-                .setRequired(true)
-                .addChoices(
-                    { name: 'Dostępny (Zielony)', value: 'online' },
-                    { name: 'Zaraz wracam (Żółty)', value: 'idle' },
-                    { name: 'Nie przeszkadzać (Czerwony)', value: 'dnd' },
-                    { name: 'Niedostępny (Szary)', value: 'invisible' }
-                )
-        )
-        .addStringOption(option =>
-            option.setName('opis')
-                .setDescription('Opis pod nazwą bota (Custom Status)')
-                .setRequired(false)
-        )
+    // Rejestracja komend z zewnętrznych plików:
+    statusCommand.data,
+    vcCommand.data
 ];
 
 module.exports = { commands };
