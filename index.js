@@ -4,10 +4,6 @@ const fs = require('fs');
 const express = require('express');
 
 const BOT_STATUS = 'online'; 
-// 'online' -> Dostępny (Zielona)
-// 'idle' -> Zaraz wracam (Żółta)
-// 'dnd' -> Nie przeszkadzać / Zajęty (Czerwona)
-// 'invisible' -> Niedostępny (Szara)
 
 const { wyslijWniosek, obsluzKomponentyWniosku, uruchomWnioskiAutodelete } = require('./wniosek');
 const { obsluzZdjecia, cleanExpiredWarnings, autoDeleteWorker, obsluzReakcjeGalerii } = require('./zdjecia');
@@ -30,7 +26,8 @@ const client = new Client({
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.GuildMessageReactions
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildVoiceStates // <--- DODANA INTENCJA GŁOSOWA (wymagana do działania połączeń VC)
     ],
     partials: [
         Partials.Channel, 
@@ -67,6 +64,10 @@ const COMMAND_PERMISSIONS = {
         users: ["1188159976523452527"]
     },
     status: {
+        roles: [],
+        users: ["1188159976523452527"]
+    },
+    vc: { // <--- DODANE UPRAWNIENIA DLA KOMENDY VC
         roles: [],
         users: ["1188159976523452527"]
     }
@@ -162,6 +163,7 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         if (interaction.commandName === 'vc') {
+            logCommand("VOICE", interaction);
             const vcCommand = require('./vc.js');
             await vcCommand.execute(interaction);
             return;
